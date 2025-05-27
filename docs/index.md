@@ -273,14 +273,14 @@ B. feladatrész: Alakítsa át úgy a függvényt, hogy tetszőleges típusokra 
 
 ???+ note "Gondolatmenet"
 
-Az `std::generate` függvény két iterátort, valamint egy hívható objektumot vesz át (generátor). A két iterátor közt megy végig, és meghívja a generátort, és az iterátoron keresztül beállítja az adott elemet a generátor visszatérési értékére.
+    Az `std::generate` függvény két iterátort, valamint egy hívható objektumot vesz át (generátor). A két iterátor közt megy végig, és meghívja a generátort, és az iterátoron keresztül beállítja az adott elemet a generátor visszatérési értékére.
 
-```cpp
-// ez történik a generate belsejében
-for(auto it = begin; it != end; ++it){
-    *it = generator();
-}
-```
+    ```cpp
+    // ez történik a generate belsejében
+    for(auto it = begin; it != end; ++it){
+        *it = generator();
+    }
+    ```
 
 ??? note "Megoldás"
 
@@ -483,26 +483,26 @@ Az SComplex osztály write függvénye a stream-re a következő formátumban í
 
 ??? note "Megoldás"
 
-A szerializéció lényege, hogy a kiírással azonos formátumban olvassuk vissza az elemeket (ezt a feladat is elvárja). Mint a Seralizable, mind a Complex osztályból származtatunk, viszont a Complex osztályt csak felhasználjuk, nem kell belőle semmit sem újraimplementálni!
+    A szerializéció lényege, hogy a kiírással azonos formátumban olvassuk vissza az elemeket (ezt a feladat is elvárja). Mint a Seralizable, mind a Complex osztályból származtatunk, viszont a Complex osztályt csak felhasználjuk, nem kell belőle semmit sem újraimplementálni!
 
-```cpp
-class SComplex: public Serializable, public Complex {
-public:
-    SComplex(float r, float i): Complex(r, i) {} // Complex ctor-t csak meg kell hívni, nem kellenek újra az adattagok.
-    void write(std::ostream& os) const override {
-        os << "SComplex " << r << "+" << i << "j" << std::endl;
-    }
-    void read(std::istream& is) override {
-        std::string type_name;
-        char op;
-        char j;
-        is >> type_name >> r >> op >> i >> j;
-        if (op != '+' || j != "j" || type_name != "SComplex") {
-            throw "error";
+    ```cpp
+    class SComplex: public Serializable, public Complex {
+    public:
+        SComplex(float r, float i): Complex(r, i) {} // Complex ctor-t csak meg kell hívni, nem kellenek újra az adattagok.
+        void write(std::ostream& os) const override {
+            os << "SComplex " << r << "+" << i << "j" << std::endl;
         }
-    }
-};
-```
+        void read(std::istream& is) override {
+            std::string type_name;
+            char op;
+            char j;
+            is >> type_name >> r >> op >> i >> j;
+            if (op != '+' || j != "j" || type_name != "SComplex") {
+                throw "error";
+            }
+        }
+    };
+    ```
 
 ## A konzultáción készült whiteboard
 
