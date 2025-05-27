@@ -1,0 +1,5 @@
+site_name: A programozás alapjai 2. PZH konzi
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
