@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>A programozás alapjai 2. PZH konzi</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/fontawesome.min.css" rel="stylesheet">
+        <link href="css/brands.min.css" rel="stylesheet">
+        <link href="css/solid.min.css" rel="stylesheet">
+        <link href="css/v4-font-face.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">A programozás alapjai 2. PZH konzi</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="2"><a href="#gyemant-orokles-feladat" class="nav-link">Gyémánt öröklés feladat</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="2"><a href="#adapter" class="nav-link">Adapter</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="2"><a href="#iteratorok" class="nav-link">Iterátorok</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="2"><a href="#stl-eszkozok" class="nav-link">STL eszközök</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="2"><a href="#egyeb-coderunner-feladatok" class="nav-link">Egyéb CodeRunner feladatok</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="2"><a href="#a-konzultacion-keszult-whiteboard" class="nav-link">A konzultáción készült whiteboard</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="gyemant-orokles-feladat">Gyémánt öröklés feladat</h2>
+<p>Új neptun rendszer (Neptun) kerül fejlesztésre, heves viták után a vezetőség a C++ mellett tette le a voksát. Feladatunk most egy demo program készítése a rendszer modellezésére, amit később lehet hogy tovább bővítünk. Szeretnénk nyilvántartani minden egyetemi polgárt (<code>Polgar</code>), minden polgárnak van neve és életkora. Az egyetemen a polgárokhoz tartoznak a <code>Hallgató</code>k és a <code>Tanár</code>ok is. A hallgatók számon tartják az eddig teljesített kreditek összegét, míg a tanárok az eddig konzultált hallgatók számát. Speciális helyzetben vannak a Doktoranduszok, akik hallgatók és tanárok is egyben. Mindenkinek kiírható a neve és életkora, valamint a hallgatóknál a teljesített kredit, tanároknál a konzultált hallgatók száma. <code>Doktorandusz</code> viselkedhet tanárként és hallgatóként is. Minden egyednél kiírhatók (<code>kiir()</code>) ezek az értékek a kapott ostream paraméterre.  A Neptun rendszerbe új polgárt bevinni a <code>hozzaad()</code> metódussal lehet, illetve paraméterben megadott adatfolyamra ki lehet listázni az összes egyetemi polgár minden adatát (<code>listaz()</code>). Ha a <code>Neptun</code> rendszer megsemmisül, a benne tárolt adatok is elvesznek.</p>
+<h4 id="gondoljuk-vegig">Gondoljuk végig!</h4>
+<p>Az modellünk a következő:</p>
+<ul>
+<li>Van egy <code>Polgar</code> ősosztály</li>
+<li>Belőle származik a <code>Tanar</code> és a <code>Hallgato</code></li>
+<li>A <code>Doktorandusz</code> egyszerre <code>Tanar</code> és <code>Hallgato</code> is</li>
+</ul>
+<p><strong><em>Ez gyémánt öröklés probléma!</em></strong> A <code>Doktorandusz</code> osztályban a <code>Polgar</code> memóriaképe kétszer, a <code>Tanar</code> és <code>Hallgato</code> osztályon keresztül is megjelenik.</p>
+<p>A megoldás: virtuális ős kell a <code>Tanar</code> és <code>Hallgato</code> osztálynak!</p>
+<h3 id="tanar">Tanár</h3>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifndef TANAR_H_DEFINED</span>
+<span class="cp">#define TANAR_H_DEFINED</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;polgar.h&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Tanar</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="cm">/*...*/</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">konzultalt</span><span class="p">;</span><span class="w"> </span><span class="c1">//eddig konzultált hallgatók száma</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Tanar</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">nev</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">kor</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">konzultalt</span><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="cm">/*...*/</span><span class="p">],</span><span class="w"> </span><span class="n">konzultalt</span><span class="p">(</span><span class="n">konzultalt</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">kiir</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">os</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">[</span><span class="cm">/*...*/</span><span class="p">]</span><span class="w">  </span><span class="c1">// kiírjuk a nevét és a korát</span>
+<span class="w">        </span><span class="n">os</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;, konzultalt: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">konzultalt</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<p><img alt="Lehetosegek" src="image.png" /></p>
+<details class="note">
+<summary>Megoldás</summary>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifndef TANAR_H_DEFINED</span>
+<span class="cp">#define TANAR_H_DEFINED</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;polgar.h&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Tanar</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Polgar</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">//virtual base, mivel gyémánt probléma van.</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">konzultalt</span><span class="p">;</span><span class="w"> </span><span class="c1">//eddig konzultált hallgatók száma</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Tanar</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">nev</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">kor</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">konzultalt</span><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="o">:</span><span class="w"> </span><span class="n">Polgar</span><span class="p">(</span><span class="n">nev</span><span class="p">,</span><span class="w"> </span><span class="n">kor</span><span class="p">)],</span><span class="w"> </span><span class="n">konzultalt</span><span class="p">(</span><span class="n">konzultalt</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">kiir</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">os</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">[</span><span class="n">Polgar</span><span class="o">::</span><span class="n">kiir</span><span class="p">(</span><span class="n">os</span><span class="p">);]</span><span class="w">  </span><span class="c1">// nem duplikálunk kódot, ősbe delegálás</span>
+<span class="w">        </span><span class="n">os</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;, konzultalt: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">konzultalt</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+</details>
+<h3 id="neptun">Neptun</h3>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifndef NEPTUN_H_DEFINED</span>
+<span class="cp">#define NEPTUN_H_DEFINED</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;polgar.h&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Neptun</span><span class="w"> </span><span class="p">[</span><span class="cm">/*...*/</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="p">[</span><span class="cm">/*...*/</span><span class="p">]</span><span class="o">&gt;</span><span class="w"> </span><span class="n">adat</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">hozzaad</span><span class="p">([</span><span class="cm">/*...*/</span><span class="p">]</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">adat</span><span class="p">.[</span><span class="cm">/*...*/</span><span class="p">];</span>
+<span class="w"> </span><span class="p">}</span>
+<span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">listaz</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">os</span><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="k">const</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">([</span><span class="cm">/*...*/</span><span class="p">]</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">[</span><span class="cm">/*...*/</span><span class="p">];</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="p">[</span><span class="cm">/*...*/</span><span class="p">]</span><span class="n">kiir</span><span class="p">(</span><span class="n">os</span><span class="p">);</span>
+<span class="w">       </span><span class="n">os</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w"> </span><span class="p">}</span>
+<span class="w"> </span><span class="p">[</span><span class="cm">/*...*/</span><span class="p">]</span><span class="w"> </span><span class="o">~</span><span class="n">Neptun</span><span class="p">();</span><span class="w">     </span><span class="c1">// külön valósítjuk meg</span>
+<span class="p">};</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<p><img alt="Lehetosegek" src="image-1.png" /></p>
+<details class="note">
+<summary>Megoldás</summary>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifndef NEPTUN_H_DEFINED</span>
+<span class="cp">#define NEPTUN_H_DEFINED</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;polgar.h&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Neptun</span><span class="w"> </span><span class="p">[</span><span class="cm">/* üres */</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="p">[</span><span class="n">Polgar</span><span class="o">*</span><span class="p">]</span><span class="o">&gt;</span><span class="w"> </span><span class="n">adat</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">hozzaad</span><span class="p">([</span><span class="n">Polgar</span><span class="o">*</span><span class="p">]</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">adat</span><span class="p">.[</span><span class="n">push_back</span><span class="p">(</span><span class="n">b</span><span class="p">)];</span>
+<span class="p">}</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">listaz</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">os</span><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="k">const</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">([</span><span class="kt">size_t</span><span class="p">]</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">[</span><span class="n">adat</span><span class="p">.</span><span class="n">size</span><span class="p">()];</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">[</span><span class="n">adat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="err">‑</span><span class="o">&gt;</span><span class="p">]</span><span class="n">kiir</span><span class="p">(</span><span class="n">os</span><span class="p">);</span>
+<span class="w">    </span><span class="n">os</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="p">[</span><span class="cm">/* üres */</span><span class="p">]</span><span class="w"> </span><span class="o">~</span><span class="n">Neptun</span><span class="p">();</span><span class="w">     </span><span class="c1">// külön valósítjuk meg</span>
+<span class="p">};</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+</details>
+<h2 id="adapter">Adapter</h2>
+<h3 id="pytomb-stdvector-adapter">PyTomb std::vector adapter</h3>
+<p>Az adapter tervezési minta lényege a következő: </p>
+<p>Van egy osztály, ami elvár egy interfészt egy másik osztálytól (<code>Adaptee</code>), viszont az <code>Adaptee</code> osztály nem felel meg ennek az interfésznek. Ezért készítünk egy új osztályt (<code>Adapter</code>), aki megvalósítja az elvárt interfészt az <code>Adaptee</code> osztály felhasználásával.</p>
+<p>A jelenlegi feladatban egy <code>PyTomb</code> nevű adaptert kell elkészíteni, ami az <code>std::vector&lt;T&gt;</code> osztály <code>operator[]</code> tagfüggvényét változtatja meg olyan módon, hogy negatív index esetén a tömböt hátulról indexel.
+Elvárás továbbá az is, hogy a <code>PyTomb</code> és <code>std::vector</code> kompatiblisek legyenek.</p>
+<details class="note" open="open">
+<summary>Gondolatmenet</summary>
+<p>A kompatibilitás miatt fontos, hogy az <code>std::vector&lt;T&gt;</code> -ből le kell származni. A C++ name lookup szabályai miatt ha egy template paramétertől függő ősosztályból szeretnénk tagfüggvényt hívni, akkor ki kell írni a teljes ősosztályt elé, pl <code>std::vector&lt;T&gt;::at(idx);</code>
+Erre azért van szükség, mivel a template olvasásakor a fordító a neveket nem keresi a template paraméterektől függő ősosztályokban (hiszen még nem tudja, hogy melyik template paraméterekkel van használva a sablon, és explicit specializációk miatt nem tudja, melyik specializációban keressen.)</p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Foo</span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Foo</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">k</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Bar</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Foo</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">b</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">f</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"> </span>
+<span class="w">    </span><span class="cm">/*hiba, nincs találat f-re, mivel Foo&lt;T&gt; ősosztály függ T-től,</span>
+<span class="cm">    és nem biztos, hogy minden Foo&lt;T&gt; -ben létezik f(), pl itt Foo&lt;int&gt; -ben nem.</span>
+<span class="cm">    */</span>
+<span class="p">};</span>
+</code></pre></div>
+</details>
+<details class="note">
+<summary>Megoldás</summary>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PyTomb</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="cm">/*dependent base class! figyelni kell a nevekre*/</span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="o">:</span>
+
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">vector</span><span class="p">;</span><span class="w"> </span><span class="c1">// minden vector nevű fgv. átvétele az std::vector&lt;T&gt; -ből, &quot;ctor öröklés&quot;</span>
+
+<span class="w">    </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">[](</span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">idx</span><span class="p">){</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">at</span><span class="p">(</span><span class="n">idx</span><span class="p">);</span><span class="w"> </span><span class="c1">// at tagfgv. csinál bounds checkinget is, ezt nekünk nem kell megcsinálni</span>
+<span class="w">        </span><span class="p">}</span><span class="k">else</span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">idx</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">[](</span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">{</span><span class="w"> </span><span class="c1">//ugyanez const-ra is!</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">at</span><span class="p">(</span><span class="n">idx</span><span class="p">);</span><span class="w"> </span><span class="c1">// at tagfgv. csinál bounds checkinget is, ezt nekünk nem kell megcsinálni</span>
+<span class="w">        </span><span class="p">}</span><span class="k">else</span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">idx</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h2 id="iteratorok">Iterátorok</h2>
+<h3 id="dinamikus-tomb-iterator">Dinamikus tömb iterátor</h3>
+<p>Egészítse ki a lenti dinamikus generikus tömböt iterátorral! Az iterátort a generikus osztály belső publikus osztályaként implementálja! A megadott kódrészletekhez ne nyúljon, csak kiegészítheti azt!</p>
+<p>Az iterátornak a következő funkciókkal kell rendelkeznie:</p>
+<ul>
+<li>paraméter nélküli konstruktor: nullptr állít be (az iterátor érvénytelen)</li>
+<li>egyparaméteres konstruktor: konstans GenDinTomb referenciát vesz át, a tömb elejére állítja az iterátort</li>
+<li>kétparaméteres ctor: konstans GenDinTomb referenciát és egy size_t indexet vesz át, az iterátort a tömb indexedik elemére állítja</li>
+<li>dereferáló (<em>) operátor: referenciát ad vissza, ha az iterátor érvénytelen (nullptr, túlcímzés), dobjon const char</em> típusú kivételt!</li>
+<li>Összehasonlító operátorok (== és !=), összehasonlít két iterátort, logikai értékkel tér vissza, elvárt módon működjön.</li>
+<li>Preinkremens operátor: Ha az iterátor nem érvénytelen, akkor a következő elemre mutat a tömbben, különben nem csinál semmit.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GenDinTomb</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="n">elements</span><span class="p">;</span><span class="w"> </span><span class="c1">// pointer a din. foglalt adatra</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w">    </span><span class="c1">// méret</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">GenDinTomb</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">());</span>
+<span class="w">    </span><span class="n">GenDinTomb</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenDinTomb</span><span class="o">&amp;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GenDinTomb</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenDinTomb</span><span class="o">&amp;</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">//segédfgv. kiírja a tömb méretét és elemeit </span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">printDbg</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"> </span>
+<span class="w">    </span><span class="c1">//--------------------------csak ezt szerkesztheti-------------------------</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">iterator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">//ezt kell megírni</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="c1">//------------------------------eddig-------------------------------</span>
+<span class="p">};</span>
+</code></pre></div>
+<details class="note">
+<summary>Megoldás</summary>
+<p>Az iterátor a pointerek absztrakciója. Az interfészük hasonló a pointerekhez, viszont extra funkcionalitást valósítanak meg.
+A feladatban <em>bounds checking</em>-et kell implementálni, azaz figyelni kell, hogy valóban a tömb egy elemét érjük el az iterátoron keresztül.
+Ehhez biztosan kelleni fog 2 tagváltozó: A jelenlegi elemet azonosító (pointer v. index), valamint a tömb végét azonosító (pointer v. index).
+Ebben a megoldásban a dinamikus tömbre mutató pointer + index a tömbbe megoldást választottam, de nem ez az egyetlen jó megoldás.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">iterator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">GenDinTomb</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span><span class="w"> </span><span class="n">tomb</span><span class="p">;</span><span class="w"> </span><span class="c1">//erre a tömbre vonatkozik az index</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">current_idx</span><span class="p">;</span><span class="w"> </span><span class="c1">//az elem indexe amire az iterátor mutat</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">iterator</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">tomb</span><span class="p">(</span><span class="k">nullptr</span><span class="p">),</span><span class="w"> </span><span class="n">current_idx</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">iterator</span><span class="p">(</span><span class="n">GenDinTomb</span><span class="o">&amp;</span><span class="w"> </span><span class="n">tomb</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">tomb</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tomb</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">iterator</span><span class="p">(</span><span class="n">GenDinTomb</span><span class="o">&amp;</span><span class="w"> </span><span class="n">tomb</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">tomb</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tomb</span><span class="p">),</span><span class="w"> </span><span class="n">current_idx</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">*</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">tomb</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">current_idx</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">tomb</span><span class="p">.</span><span class="n">size</span><span class="p">()){</span><span class="w"> </span><span class="c1">// ha invalid a tömb vagy invalid az index akkor hibát kell dobni</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="s">&quot;Helytelen indirekcio&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">tomb</span><span class="p">[</span><span class="n">current_idx</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">rhs</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">tomb</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">rhs</span><span class="p">.</span><span class="n">tomb</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">current_idx</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">rhs</span><span class="p">.</span><span class="n">idx</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">rhs</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">rhs</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">++</span><span class="p">(){</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">tomb</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">current_idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">tomb</span><span class="p">.</span><span class="n">size</span><span class="p">()){</span><span class="w"> </span><span class="c1">// ha valid a tömb és valid az iterátor akkor léptetjük egyet (valid iterátor: tömbbe vagy egyel a tömb után mutat)</span>
+<span class="w">            </span><span class="n">current_idx</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+</details>
+<h2 id="stl-eszkozok">STL eszközök</h2>
+<h3 id="indexgen">Indexgen</h3>
+<p>Készítsen egy olyan függvényt (indexgen néven), ami két paramétert kap: Egy kezdő számértéket (int), valamint egy felső határt (int). A függvény feladata egy olyan tömb (std::vector<int>) visszaadása, ami az összes egész számot tartalmazza a kezdő számtól(alsó határ) a felső határig (azt már nem).  A függvény fejlécét megadtuk, azt ne változtassa!</p>
+<p>Használja fel ehhez az <code>std::generate</code> függvényt! For vagy while ciklust ne használjon! A megoldáshoz további segédfüggvényt, osztályt is felvehet!</p>
+<p>Példa a használatra:</p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">indexgen</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;,&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">//0,1,2,3,</span>
+</code></pre></div>
+<p>B. feladatrész: Alakítsa át úgy a függvényt, hogy tetszőleges típusokra működjön, a posztinkremens és a kivonás művelet értelmezve van a típuson! (persze ekkor a függvényfejléchez hozzányúlhat)</p>
+<details class="note" open="open">
+<summary>Gondolatmenet</summary>
+<p>Az <code>std::generate</code> függvény két iterátort, valamint egy hívható objektumot vesz át (generátor). A két iterátor közt megy végig, és meghívja a generátort, és az iterátoron keresztül beállítja az adott elemet a generátor visszatérési értékére.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ez történik a generate belsejében</span>
+<span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">begin</span><span class="p">;</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">end</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">it</span><span class="p">){</span>
+<span class="w">    </span><span class="o">*</span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">generator</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<details class="note">
+<summary>Megoldás</summary>
+<p>A. feladatrész: int típusra</p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">CounterFunctor</span><span class="p">{</span>
+<span class="w">    </span><span class="n">CounterFunctor</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="k">operator</span><span class="p">()()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">indexgen</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">also</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">felso</span><span class="p">){</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">(</span><span class="n">felso</span><span class="o">-</span><span class="n">also</span><span class="p">);</span><span class="w"> </span><span class="c1">//ebben lesz az eredmény, a ctor-ban a méretet adjuk meg, hogy a begin és end jók legyenek.</span>
+<span class="w">    </span><span class="n">CounterFunctor</span><span class="w"> </span><span class="nf">gen</span><span class="p">(</span><span class="n">also</span><span class="p">);</span><span class="w"> </span><span class="c1">// készítünk egy számláló generátort ami az alsó értékrők indul</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">generate</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">gen</span><span class="p">);</span><span class="w"> </span><span class="c1">// átadjuk az eredmény range-t és a generátor példányt. NEM gen(), hanem gen !!</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>B. feladatrész: int helyett minden típusra</p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">CounterFunctor</span><span class="p">{</span>
+<span class="w">    </span><span class="n">CounterFunctor</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="k">operator</span><span class="p">()()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">indexgen</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">also</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">felso</span><span class="p">){</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">(</span><span class="n">felso</span><span class="o">-</span><span class="n">also</span><span class="p">);</span><span class="w"> </span><span class="c1">//ebben lesz az eredmény, a ctor-ban a méretet adjuk meg, hogy a begin és end jók legyenek.</span>
+<span class="w">    </span><span class="n">CounterFunctor</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">gen</span><span class="p">(</span><span class="n">also</span><span class="p">);</span><span class="w"> </span><span class="c1">// készítünk egy számláló generátort ami az alsó értékrők indul. Nem kell a &lt;T&gt;, de kiírhatjuk</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">generate</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">gen</span><span class="p">);</span><span class="w"> </span><span class="c1">// átadjuk az eredmény range-t és a generátor példányt. NEM gen(), hanem gen !!</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h3 id="boolindexing">Boolindexing</h3>
+<p>Készítsen egy olyan függvényt boolindexing néven, ami két paramétert kap: egy <code>vector&lt;int&gt;</code> tömböt, valamint egy predikátumot. A függvény feladata egy olyan logikai tömb (<code>std::vector&lt;bool&gt;</code>) visszaadása, amiben az 'idx' indexű helyen akkor áll igaz, ha az eredeti tömbben az idx helyen lévő értékre a predikátum igaz, különben hamis. Implementálja a megoldáshoz a "paros" predikátumot, ami akkor ad vissza igazat, ha a paraméterül kapott egész szám páros.</p>
+<p>Használja fel ehhez az <code>std::transform</code> függvényt! For vagy while ciklust ne használjon! A megoldáshoz további segédfüggvényt, osztályt is felvehet!</p>
+<p>Példa a használatra:</p>
+<div class="highlight"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">boolindexing</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">paros</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">tb</span><span class="p">)</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;,&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">//0,1,0,1,</span>
+</code></pre></div>
+<p>B. feladatrész: int helyett minden típusra</p>
+<details class="note" open="open">
+<summary>Gondolatmenet</summary>
+<p>Az <code>std::transform</code> függvény átvesz három iterátort valamint egy hívható objektumot (művelet). A három iterátor a következőt jelenti:
+* bemeneti range eleje
+* bemeneti range vége
+* kimeneti range eleje</p>
+<p>A művelet pedig a bemeneti range elemtípusát (Az A. feladatban <code>int</code>) veszi át, és a kimeneti range elemtípusát adja vissza (ebben a feladatban <code>bool</code>).</p>
+<p>Azaz a transform egy másik, "kimeneti" iterátorral határozza meg, hogy hova kezdi el írni az eredményeket.</p>
+<p>Az eredményeket úgy kapja meg, hogy a műveletet meghívja a bemeneti range összes elemére egyesével és a visszaadott értéket kiírja a kimeneti range-be.</p>
+<p>Belül valami ilyesmi történik:</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">begin</span><span class="p">,</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">end</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">it</span><span class="p">){</span>
+<span class="w">    </span><span class="o">*</span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">muvelet</span><span class="p">(</span><span class="o">*</span><span class="n">it</span><span class="p">);</span>
+<span class="w">    </span><span class="o">++</span><span class="n">out</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<details class="note">
+<summary>Megoldás</summary>
+<p>A. feladatrész</p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Op</span><span class="o">&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">boolindexing</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">Op</span><span class="w"> </span><span class="n">muvelet</span><span class="p">){</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">muvelet</span><span class="p">);</span><span class="w"> </span><span class="c1">// input begin, input end, output being, binary op</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>A példa <code>paros</code> művelet pedig egy egyszerű függvény lesz:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="nf">paros</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">){</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>B. feladatrész:</p>
+<p>Csak az int-et kell T -re cserélni:</p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">Op</span><span class="o">&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">boolindexing</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">Op</span><span class="w"> </span><span class="n">muvelet</span><span class="p">){</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">muvelet</span><span class="p">);</span><span class="w"> </span><span class="c1">// input begin, input end, output being, op</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h2 id="egyeb-coderunner-feladatok">Egyéb CodeRunner feladatok</h2>
+<h3 id="myset">MySet</h3>
+<p>Implementáljon egy generikus tárolót, ami halmazként fog működni. Az osztályt MySet néven implementálja. A halmazban tárolt elemek típusát és annak méretét (size_t) sablonparaméterként lehet beállítani. Alapértelmezetten a halmaz mérete 10. Az elemeket egy fix méretű tömbben a sablonozás segítségével kell eltárolni, ezt a tömböt elements-nek nevezze el. Feltételezheti, hogy a megadott típusoknak van alapértelmezett konstruktora, továbbá érvényes rajtuk az összehasonlító (==) operátor.  Figyeljen a láthatóságra. Továbbá:</p>
+<ul>
+<li>contains metódus: igaz logikai értéket ad vissza, ha a paraméterül kapott elem benne van a halmazban már, különben hamis értéket. </li>
+<li>insert metódus: belerakja a halmazba, a kapott értéket (ha nem volt benne). 
+  Ha nem volt benne, viszont a halmaz kapacitása (sablonparaméter) már nem elég, akkor const char* kivételt dob. Ha a paraméterül kapott érték már szerepel a halmazban, nem csinál semmit. </li>
+<li>size metódus: visszaadja az eddig tárolt elemek számát.</li>
+<li>capacity metódus: visszaadja a halmaz kapacitását (mennyi különböző elemet lehet maximum belerakni)</li>
+</ul>
+<details class="note" open="open">
+<summary>Gondolatmenet</summary>
+<p>A feladat lényege a nem-típus sablonparaméter használata. Mivel a sablonparaméter fordítási időben konstans, ezért lehet tömb méretéhez használni. A feladathoz éppen ezért nincs szükség dinamikus memóriakezelésre.</p>
+</details>
+<details class="note">
+<summary>Megoldás</summary>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="o">&gt;</span><span class="w"> </span><span class="c1">// milyen típust és max mennyit tárol</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MySet</span><span class="p">{</span>
+<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">elements</span><span class="p">[</span><span class="n">C</span><span class="p">];</span><span class="w"> </span><span class="c1">// C fordítási időben konstans tehát használható tömb méretként</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">meret</span><span class="p">;</span><span class="w"> </span><span class="c1">// tényleges méret, amennyit beleraktunk már</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">MySet</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">meret</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="c1">// meret 0-ról induljon</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">contains</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">meret</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">t</span><span class="p">){</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">insert</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="p">){</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">t</span><span class="p">)){</span><span class="w"> </span><span class="c1">// contains felhasználása!</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">meret</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">C</span><span class="p">){</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="s">&quot;Tele van&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">elements</span><span class="p">[</span><span class="n">meret</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<span class="w">            </span><span class="o">++</span><span class="n">meret</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">meret</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">capacity</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">C</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+</details>
+<h3 id="serializable-complex">Serializable Complex</h3>
+<p>Készítsen szerializálható osztályt a Complex és a Serializable osztály felhasználásával: A SComplex legyen kompatibilis mindkét osztállyal! A fenti osztályok deklarációja a következő: </p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Complex</span><span class="w"> </span><span class="p">{</span>
+<span class="k">protected</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="c1">// r+ij</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Complex</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="nf">getR</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="nf">getI</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Serializable</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">os</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">is</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>Az SComplex osztály write függvénye a stream-re a következő formátumban írja ki az objektum adattagjait: <code>"SComplex [r]+[i]j\n"</code> (a [x] helyére az adott adattag kerül, például <code>"SComplex 2+3j"</code>). A read függvény pedig ilyen formában olvassa be a kiszerializált adatokat.  Ha a read függvény rossz formátumot kap (például rossz név vagy nem +/j szerepel), akkor kivételt dob a következő karakterlánccal: <code>"error"</code>.</p>
+<details class="note">
+<summary>Megoldás</summary>
+<p>A szerializéció lényege, hogy a kiírással azonos formátumban olvassuk vissza az elemeket (ezt a feladat is elvárja). Mint a Seralizable, mind a Complex osztályból származtatunk, viszont a Complex osztályt csak felhasználjuk, nem kell belőle semmit sem újraimplementálni!</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SComplex</span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Serializable</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Complex</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">SComplex</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="n">Complex</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="c1">// Complex ctor-t csak meg kell hívni, nem kellenek újra az adattagok.</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">os</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">os</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;SComplex &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;+&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;j&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">&amp;</span><span class="w"> </span><span class="n">is</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">type_name</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="n">op</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
+<span class="w">        </span><span class="n">is</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">type_name</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">op</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">op</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;+&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;j&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">type_name</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;SComplex&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+</details>
+<h2 id="a-konzultacion-keszult-whiteboard">A konzultáción készült whiteboard</h2>
+<p><img alt="alt text" src="image-2.png" /></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js"></script>
+        <script src="search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2025-05-27 16:32:43.639236+00:00
+-->
