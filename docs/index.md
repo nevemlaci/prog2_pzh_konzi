@@ -244,7 +244,7 @@ public:
         }
 
         iterator& operator++(){
-            if(tomb != nullptr && current_idx <= tomb.size()){ // ha valid a tömb és valid az iterátor akkor léptetjük egyet (valid iterátor: tömbbe vagy egyel a tömb után mutat)
+            if(tomb != nullptr && current_idx < tomb.size()){ // ha valid a tömb és valid az iterátor akkor léptetjük egyet (valid iterátor: tömbbe vagy egyel a tömb után mutat)
                 current_idx++;
             }
 
@@ -397,7 +397,7 @@ B. feladatrész: int helyett minden típusra
     template<typename T, typename Op>
     std::vector<bool> boolindexing(const std::vector<T>& v, Op muvelet){
         std::vector<bool> result(v.size());
-        std::transform(v.begin(), v.end(), result.begin(), muvelet); // input begin, input end, output being, binary op
+        std::transform(v.begin(), v.end(), result.begin(), muvelet); // input begin, input end, output being, op
 
         return result;
     }
@@ -504,5 +504,6 @@ public:
 };
 ```
 
+## A konzultáción készült whiteboard
 
-
+![alt text](image-2.png)
