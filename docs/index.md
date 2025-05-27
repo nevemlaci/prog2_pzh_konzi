@@ -159,7 +159,7 @@ Elvárás továbbá az is, hogy a `PyTomb` és `std::vector` kompatiblisek legye
             if(idx >= 0){
                 return std::vector<T>::at(idx); // at tagfgv. csinál bounds checkinget is, ezt nekünk nem kell megcsinálni
             }else{
-                return std::vector<T>::at(std::vector<T>::size() - idx);
+                return std::vector<T>::at(std::vector<T>::size() + idx);
             }
         }
 
@@ -167,7 +167,7 @@ Elvárás továbbá az is, hogy a `PyTomb` és `std::vector` kompatiblisek legye
             if(idx >= 0){
                 return std::vector<T>::at(idx); // at tagfgv. csinál bounds checkinget is, ezt nekünk nem kell megcsinálni
             }else{
-                return std::vector<T>::at(std::vector<T>::size() - idx);
+                return std::vector<T>::at(std::vector<T>::size() + idx);
             }
         }
     }
